@@ -1,6 +1,8 @@
 const fs = require('fs');
 const express = require('express');
 const app = express();
+var morgan = require('morgan');
+//  1) MIDDLEWARE
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -13,6 +15,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(morgan('dev'));
+
+// 2) ROUTER HANDLE
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
@@ -97,6 +102,8 @@ const deleteTour = (req, res) => {
   });
 };
 
+// ROUTES
+
 // app.get('/api/v1/tours', getAllTours);
 
 // app.get('/api/v1/tours/:id', getTour);
@@ -114,6 +121,8 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+// 3) START SERVER
 
 const port = 3000;
 
