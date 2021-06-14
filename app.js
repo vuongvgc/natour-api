@@ -3,13 +3,25 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log('Hello . This is messenger from middleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 const getAllTours = (req, res) => {
+  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     result: tours.length,
+    time: req.requestTime,
     data: {
       tours,
     },
@@ -96,6 +108,7 @@ const deleteTour = (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
 app
   .route('/api/v1/tours/:id')
   .get(getTour)
@@ -103,6 +116,7 @@ app
   .delete(deleteTour);
 
 const port = 3000;
+
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
