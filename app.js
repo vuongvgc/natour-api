@@ -145,21 +145,21 @@ const deleteUser = (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 // ROUTES
+const routeTour = express.Router();
+const routeUser = express.Router();
 
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+// TOURS
+routeTour.route('/').get(getAllTours).post(createTour);
+routeTour.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
-app
-  .route('/api/v1/tours/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
+// USER
+routeUser.route('/').get(getAllUsers).post(createUser);
+routeUser.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
-app.route('/api/v1/users').get(getAllUsers).post(createUser);
-app
-  .route('/api/v1/users/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+// MOUNTING MULTIPLE ROUTERS
+app.use('/api/v1/tours', routeTour);
+app.use('/api/v1/users', routeUser);
+
 // 3) START SERVER
 
 const port = 3000;
