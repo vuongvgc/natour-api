@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 var morgan = require('morgan');
+const { get } = require('http');
 //  1) MIDDLEWARE
 app.use(express.json());
 
@@ -102,7 +103,36 @@ const deleteTour = (req, res) => {
   });
 };
 
-// ROUTES
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
 
 // app.get('/api/v1/tours', getAllTours);
 
@@ -114,6 +144,8 @@ const deleteTour = (req, res) => {
 
 // app.delete('/api/v1/tours/:id', deleteTour);
 
+// ROUTES
+
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app
@@ -122,6 +154,12 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 // 3) START SERVER
 
 const port = 3000;
