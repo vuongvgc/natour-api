@@ -9,3 +9,6 @@ Status code: 200 201 202 , 400, 404 : https://developer.mozilla.org/en-US/docs/W
 CRUD: https://viblo.asia/p/crud-la-gi-lap-trinh-website-crud-crud-database-Ljy5VyLzlra
 REST Architecture
 Middleware stack: request response cycle https://iq.opengenus.org/middlewares-in-express/
+
+separate: express and server
+create controller to MVC
