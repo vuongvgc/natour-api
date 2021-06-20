@@ -12,3 +12,5 @@ Middleware stack: request response cycle https://iq.opengenus.org/middlewares-in
 
 separate: express and server
 create controller to MVC
+Eslint config : https://eslint.org/docs/rules/
+eviroment varibables: https://nodejs.dev/learn/how-to-read-environment-variables-from-nodejs
