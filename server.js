@@ -19,6 +19,9 @@ mongoose
   .then(() => {
     // console.log(con.connection);
     console.log('DB is Connection');
+  })
+  .catch((err) => {
+    console.log(`DB is  ${err}`);
   });
 
 // console.log(app.get('env'));
