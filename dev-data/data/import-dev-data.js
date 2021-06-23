@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const Tour = require('../../models/toursModel');
+const { exit } = require('process');
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
@@ -32,6 +33,7 @@ const importData = async () => {
   } catch (err) {
     console.log(err);
   }
+  exit();
 };
 
 const deleteData = async () => {
@@ -40,6 +42,12 @@ const deleteData = async () => {
   } catch (err) {
     console.log(err);
   }
+  exit();
 };
-importData();
-deleteData();
+// importData();
+// deleteData();
+if (process.argv[2] === '--import') {
+  importData();
+} else if (process.argv[2] === '--delete') {
+  deleteData();
+}
