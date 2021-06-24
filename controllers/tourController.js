@@ -21,7 +21,7 @@ exports.getAllTours = async (req, res) => {
     excludedFields.forEach((el) => delete queryObj[el]);
     // console.log(queryObj);
 
-    // Advanced Query
+    // *** Advanced Filter****
     // { duration: { gte: '5' }, difficulty: 'easy' }
     // { duration: { $gte: '5' }, difficulty: 'easy' }
     let queryString = JSON.stringify(queryObj);
@@ -32,12 +32,22 @@ exports.getAllTours = async (req, res) => {
     // console.log(JSON.parse(queryString));
     let query = Tour.find(JSON.parse(queryString));
 
-    //SORT
+    //****SORT*****
     // console.log(req.query);
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
       // console.log(sortBy);
       query = query.sort(sortBy);
+    } else {
+      query = query.sort('createAt');
+    }
+    //****LIMIT*****
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      // query = query.select('-__v -createAt');
+      query = query.select('-__v');
     }
 
     //2) Execute Query
