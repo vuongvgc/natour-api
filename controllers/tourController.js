@@ -13,16 +13,27 @@ exports.getAllTours = async (req, res) => {
     //   duration: 5,
     //   difficulty: 'easy',
     // });
-    // Build Query
+    //1) Build Query
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     const queryObj = { ...req.query };
+    // Filter Query
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
-    // console.log(queryObj, req.query);
-    const query = Tour.find(queryObj);
-    // Execute Query
+    // console.log(queryObj);
+
+    // Advanced Query
+    // { duration: { gte: '5' }, difficulty: 'easy' }
+    // { duration: { $gte: '5' }, difficulty: 'easy' }
+    let queryString = JSON.stringify(queryObj);
+    queryString = queryString.replace(
+      /\b(gte|gt|lte|lt)\b/g,
+      (match) => `$${match}`
+    );
+    // console.log(JSON.parse(queryString));
+    const query = Tour.find(JSON.parse(queryString));
+    //2) Execute Query
     const tours = await query;
-    // Response Query
+    //3) Response Query
     res.status(200).json({
       status: 'success',
       result: tours.length,
