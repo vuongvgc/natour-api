@@ -1,8 +1,8 @@
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const Tour = require('../../models/toursModel');
 const { exit } = require('process');
+const Tour = require('../../models/toursModel');
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
