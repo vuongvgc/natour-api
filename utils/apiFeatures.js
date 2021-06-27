@@ -14,15 +14,22 @@ class APIFeatures {
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`
     );
+
+    //Tour.find({ name: 'The Star Gazer', ratingsAverage: { $gte: 4.5 } })
+
     this.query = this.query.find(JSON.parse(queryString));
     return this;
   }
 
   sort() {
     if (this.queryString.sort) {
+      //Tour.sort(' price, -test ');
+
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
     } else {
+      // Tour.sort({createAt})
+
       this.query = this.query.sort('createAt');
     }
     return this;
@@ -30,6 +37,8 @@ class APIFeatures {
 
   limit() {
     if (this.queryString.fields) {
+      //Tour.select('name price duration')
+
       const fields = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(fields);
     } else {
