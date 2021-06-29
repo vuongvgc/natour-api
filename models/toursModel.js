@@ -55,6 +55,7 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
+    secretTour: Boolean,
   },
   {
     toJSON: { virtual: true },
@@ -69,14 +70,34 @@ tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
-// DOCUMENT MIDDLEWARE: WILL SAVE DOCUMENT
-tourSchema.pre('save', (next) => {
-  console.log('Will save Documnet');
+// // DOCUMENT MIDDLEWARE: WILL SAVE DOCUMENT
+// tourSchema.pre('save', (next) => {
+//   console.log('Will save Documnet');
+//   next();
+// });
+// // DOCUMENT MIDDLEWARE: run after save or create done
+// tourSchema.post('save', (doc, next) => {
+//   console.log(doc);
+//   next();
+// });
+
+// QUERY DOCUMENT
+//Run before find query
+// tourSchema.pre('find', function (next) {
+//   this.find({ secretTour: { $ne: true } });
+//   next();
+// });
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  this.start = Date.now();
   next();
 });
-// DOCUMENT MIDDLEWARE: run after save or create done
-tourSchema.post('save', (doc, next) => {
-  console.log(doc);
+// Run after find query
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(
+    `time execution query find ${Date.now() - this.start} millisecond`
+  );
+  console.log(docs);
   next();
 });
 

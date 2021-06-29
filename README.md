@@ -14,3 +14,7 @@ separate: express and server
 create controller to MVC
 Eslint config : https://eslint.org/docs/rules/
 eviroment varibables: https://nodejs.dev/learn/how-to-read-environment-variables-from-nodejs
+middlware mongoose: https://mongoosejs.com/docs/middleware.html
+slugify:https://slugify.online/ https://www.npmjs.com/package/slugify
+Mongoose Virtual properties: https://mongoosejs.com/docs/tutorials/virtuals.html
+aggregate: https://docs.mongodb.com/manual/aggregation/ https://docs.mongodb.com/manual/core/aggregation-pipeline/
