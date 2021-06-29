@@ -81,7 +81,7 @@ tourSchema.pre('save', function (next) {
 //   next();
 // });
 
-// QUERY DOCUMENT
+// QUERY MIDDLEWARE
 //Run before find query
 // tourSchema.pre('find', function (next) {
 //   this.find({ secretTour: { $ne: true } });
@@ -97,9 +97,18 @@ tourSchema.post(/^find/, function (docs, next) {
   console.log(
     `time execution query find ${Date.now() - this.start} millisecond`
   );
+  // console.log(docs);
+  next();
+});
+// AGGREGATE MIDDLEWARE
+tourSchema.pre('aggregate', function (next) {
+  // console.log(this.pipeline());
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  next();
+});
+tourSchema.post('aggregate', function (docs, next) {
   console.log(docs);
   next();
 });
-
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;

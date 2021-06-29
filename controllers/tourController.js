@@ -258,9 +258,9 @@ exports.getToursStats = async (req, res) => {
           avePrice: 1,
         },
       },
-      {
-        $match: { _id: { $ne: 'EASY' } },
-      },
+      // {
+      //   $match: { _id: { $ne: 'EASY' } },
+      // },
     ]);
     res.status(200).json({
       status: 'success',
