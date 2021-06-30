@@ -58,7 +58,7 @@ exports.aliasTopTour = async (req, res, next) => {
   req.query.fields = 'name,price, duration, ratingsAverage, difficulty';
   next();
 };
-exports.getAllTours = async (req, res) => {
+exports.getAllTours = async (req, res, next) => {
   try {
     // console.log(req.query);
     // const tours = await Tour.find()
@@ -134,14 +134,14 @@ exports.getAllTours = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      message: 'fail',
-      error: err,
-    });
+    const error = new Error(err);
+    err.status = 'fail';
+    err.statusCode = 400;
+    next(error);
   }
 };
 
-exports.getTour = async (req, res) => {
+exports.getTour = async (req, res, next) => {
   try {
     const tour = await Tour.findById(req.params.id);
     // const tour = await Tour.find({ _id: req.params.id });
@@ -152,10 +152,10 @@ exports.getTour = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      message: 'fail',
-      error: err,
-    });
+    const error = new Error(err);
+    err.status = 'fail';
+    err.statusCode = 400;
+    next(error);
   }
 };
 
