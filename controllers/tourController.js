@@ -60,6 +60,8 @@ exports.aliasTopTour = async (req, res, next) => {
   req.query.fields = 'name,price, duration, ratingsAverage, difficulty';
   next();
 };
+console.log(x);
+
 exports.getAllTours = async (req, res, next) => {
   try {
     // console.log(req.query);

@@ -11,7 +11,7 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       minLength: [10, 'Tour must have than or equal then 10 characters'],
       maxLength: [40, 'Tour must have less or equal then 40 characters'],
-      validate: [validator.isAlpha, 'Tour not have space and number'],
+      // validate: [validator.isAlpha, 'Tour not have space and number'],
     },
     slug: String,
     duration: {

@@ -1,6 +1,9 @@
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-
+process.on('uncaughtException', (err) => {
+  console.log('Server still shutdown .....', err.name, err.message);
+  process.exit(1);
+});
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 
@@ -18,10 +21,10 @@ mongoose
   .then(() => {
     // console.log(con.connection);
     console.log('DB is Connection');
-  })
-  .catch((err) => {
-    console.log(`DB is  ${err}`);
   });
+// .catch((err) => {
+//   console.log(`DB is  ${err}`);
+// });
 
 // console.log(app.get('env'));
 // console.log(process.env);
@@ -31,6 +34,14 @@ mongoose
 //   rating: Number,
 // });
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
+process.on('unhandledRejection', (err) => {
+  console.log('unhandledRejection-Vuong', err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+console.log(x);

@@ -4,6 +4,15 @@ const handleCastErrorDB = (error) => {
   const message = `Invalid ${error._id}: ${error.value}`;
   return new AppError(message, 400);
 };
+const handleDuplicateErrorDB = (error) => {
+  const value = error.keyValue;
+  const message = `Duplicate field value: ${value} . Please use another value`;
+  return new AppError(message, 400);
+};
+const handleValidatorErrorDB = (error) => {
+  const message = Object.values(error).map((el) => el.message);
+  return new AppError(message.join(', '), 400);
+};
 const sendErrorDev = (res, err) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -41,6 +50,8 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     if (error.name === 'CastError') error = handleCastErrorDB(error);
-    sendErrorProd(res, err);
+    if (error.code === 11000) error = handleDuplicateErrorDB(error);
+    if (error.name === 'ValidationError') handleValidatorErrorDB(error);
+    error = sendErrorProd(res, err);
   }
 };
