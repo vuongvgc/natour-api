@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 // name, email, photo, password, confirm password
-const tourSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     require: [true, 'Please tell your name'],
@@ -33,5 +34,14 @@ const tourSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model('User', tourSchema);
+userSchema.pre('save', async function (next) {
+  // Only run function when password actual modify
+  if (!this.isModified('password')) return next();
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 16);
+  // Delete passwordConfirm Fields
+  this.passwordConfirm = undefined;
+});
+
+const User = mongoose.model('User', userSchema);
 module.exports = User;
