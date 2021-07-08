@@ -44,4 +44,4 @@ process.on('unhandledRejection', (err) => {
   });
 });
 
-console.log(x);
+// console.log(x);
