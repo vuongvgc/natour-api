@@ -12,7 +12,7 @@ const tourSchema = new mongoose.Schema({
     type: String,
     require: [true, 'Please provided your email'],
     unique: true,
-    validator: [validator.email, 'Please provide valid email'],
+    validate: [validator.isEmail, 'Please provide valid email'],
     lowerCase: true,
   },
   photo: String,
@@ -23,7 +23,13 @@ const tourSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    require: [true, 'Please confirm your passowrd'],
+    require: [true, 'Please confirm your password'],
+    validate: {
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Password are not the same',
+    },
   },
 });
 
