@@ -1,8 +1,21 @@
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'The route is not defined',
-  });
+const Users = require('../models/userModel');
+
+exports.getAllUsers = async (req, res, next) => {
+  const tours = await Users.find();
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: tours.length,
+      data: {
+        tours: tours,
+      },
+    });
+  } catch (err) {
+    const error = new Error(err);
+    err.status = 'fail';
+    err.statusCode = 400;
+    next(error);
+  }
 };
 exports.getUser = (req, res) => {
   res.status(500).json({
