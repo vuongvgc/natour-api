@@ -47,6 +47,23 @@ exports.logIn = async (req, res, next) => {
   });
 };
 
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+  // console.log(req.headers);
+  // 1: Get Token and check of it's there
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  console.log(token);
+  // 2: Verification Token
+  // 3: Check if token still exits
+  // 4: Check user change password after token issue
+  next();
+});
+
 // exports.signup = async (req, res, next) => {
 //   try {
 //     const newUser = await User.create(req.body);
