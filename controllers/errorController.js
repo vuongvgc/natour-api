@@ -40,6 +40,10 @@ const sendErrorProd = (res, err) => {
     });
   }
 };
+const handleJWTError = () =>
+  new AppError('Invalid token, Please login again', 401);
+const handleJWTExpriedError = () =>
+  new AppError('Expired Token, Please Login again');
 module.exports = (err, req, res, next) => {
   // console.log(err.stack);
   err.statusCode = err.statusCode || 500;
@@ -48,10 +52,13 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(res, err);
   }
   if (process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateErrorDB(error);
     if (error.name === 'ValidationError') handleValidatorErrorDB(error);
+    if (error.name === 'JsonWebTokenError') handleJWTError(error);
+    if (error.name === 'TokenExpiredError') handleJWTExpriedError(error);
     error = sendErrorProd(res, err);
   }
 };
