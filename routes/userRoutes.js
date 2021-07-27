@@ -7,12 +7,20 @@ const {
   deleteUser,
 } = require('../controllers/userController');
 
-const { signup, logIn } = require('../controllers/authController');
+const {
+  signup,
+  logIn,
+  forgotPassword,
+  resetPassword,
+} = require('../controllers/authController');
 
 // ROUTES
 const router = express.Router();
 // Auth
 
+router.post('/signup', signup);
+router.post('/forgotPassword', forgotPassword);
+router.patch('/resetPassword/:token', resetPassword);
 router.post('/signup', signup);
 router.post('/login', logIn);
 
