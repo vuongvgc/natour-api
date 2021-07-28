@@ -6,19 +6,20 @@ const {
   updateUser,
   deleteUser,
 } = require('../controllers/userController');
-
+const { protect } = require('../controllers/authController');
 const {
   signup,
   logIn,
   forgotPassword,
   resetPassword,
+  updatePassword,
 } = require('../controllers/authController');
 
 // ROUTES
 const router = express.Router();
 // Auth
 
-router.post('/signup', signup);
+router.patch('/updateMyPassword', protect, updatePassword);
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
 router.post('/signup', signup);
