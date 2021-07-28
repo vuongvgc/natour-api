@@ -10,6 +10,16 @@ const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  });
+};
 exports.signup = catchAsync(async (req, res, next) => {
   try {
     const newUser = await User.create(req.body);
@@ -43,11 +53,12 @@ exports.logIn = async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   // 3 everything ok
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token,
-  });
+  // const token = signToken(user._id);
+  // res.status(200).json({
+  //   status: 'success',
+  //   token: token,
+  // });
+  createSendToken(user, 200, res);
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -149,29 +160,31 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 3 Update passwordChangedAt property  for user
 
   // 4 Save and send JWT
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token,
-  });
+  // const token = signToken(user._id);
+  // res.status(200).json({
+  //   status: 'success',
+  //   token: token,
+  // });
+  createSendToken(user, 200, res);
 });
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1 Get user from collection
   const user = await User.findById(req.user.id).select('+password');
   // 2 Check if POSTed current is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-    return next(new AppError(400, 'Your current password is wrong'));
+    return next(new AppError(401, 'Your current password is wrong'));
   }
   // 3 If so Update Password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
   // 4 Logged user in. Send JWT
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token,
-  });
+  // const token = signToken(user._id);
+  // res.status(200).json({
+  //   status: 'success',
+  //   token: token,
+  // });
+  createSendToken(user, 200, res);
 });
 // exports.signup = async (req, res, next) => {
 //   try {
