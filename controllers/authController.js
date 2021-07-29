@@ -6,6 +6,13 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 
+const filterObj = (obj, ...allowFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -185,6 +192,33 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   //   token: token,
   // });
   createSendToken(user, 200, res);
+});
+exports.updateMe = catchAsync(async (req, res, next) => {
+  // 1 Create a error if user POSTed password data
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'The Router not for update password, Please use /updateMyPassword',
+        400
+      )
+    );
+  }
+  // 2 Filtered out unwanted field name that are not allow
+  const filterBody = filterObj(req.body, 'name', 'email');
+  // 3 Update document
+  // const updateUser = await User.findById(req.user.id);
+  // updateUser.name = req.body.name;
+  // await updateUser.save();
+  const updateUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updateUser,
+    },
+  });
 });
 // exports.signup = async (req, res, next) => {
 //   try {

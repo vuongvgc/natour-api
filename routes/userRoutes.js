@@ -13,17 +13,18 @@ const {
   forgotPassword,
   resetPassword,
   updatePassword,
+  updateMe,
 } = require('../controllers/authController');
 
 // ROUTES
 const router = express.Router();
 // Auth
-
-router.patch('/updateMyPassword', protect, updatePassword);
-router.post('/forgotPassword', forgotPassword);
-router.patch('/resetPassword/:token', resetPassword);
 router.post('/signup', signup);
 router.post('/login', logIn);
+router.post('/forgotPassword', forgotPassword);
+router.patch('/resetPassword/:token', resetPassword);
+router.patch('/updateMyPassword', protect, updatePassword);
+router.patch('/updateMe', protect, updateMe);
 
 // USER
 router.route('/').get(getAllUsers).post(createUser);
