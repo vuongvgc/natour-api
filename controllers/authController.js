@@ -13,10 +13,12 @@ const filterObj = (obj, ...allowFields) => {
   });
   return newObj;
 };
+
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   res.status(statusCode).json({
@@ -27,6 +29,7 @@ const createSendToken = (user, statusCode, res) => {
     },
   });
 };
+
 exports.signup = catchAsync(async (req, res, next) => {
   try {
     const newUser = await User.create(req.body);
@@ -102,6 +105,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
 exports.restrictTo =
   (...roles) =>
   (req, res, next) => {
@@ -111,6 +115,7 @@ exports.restrictTo =
     }
     next();
   };
+
 exports.forgotPassword = async (req, res, next) => {
   // 1 Get user based on POST email
   const user = await User.findOne({ email: req.body.email });
@@ -146,6 +151,7 @@ exports.forgotPassword = async (req, res, next) => {
     );
   }
 };
+
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1 Get User based on token
   const hashedToken = crypto
@@ -174,6 +180,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // });
   createSendToken(user, 200, res);
 });
+
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1 Get user from collection
   const user = await User.findById(req.user.id).select('+password');
@@ -193,6 +200,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // });
   createSendToken(user, 200, res);
 });
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1 Create a error if user POSTed password data
   if (req.body.password || req.body.passwordConfirm) {
@@ -218,6 +226,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     data: {
       user: updateUser,
     },
+  });
+});
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+  res.status(204).json({
+    status: 'success',
+    data: null,
   });
 });
 // exports.signup = async (req, res, next) => {
