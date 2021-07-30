@@ -17,24 +17,28 @@ exports.getAllUsers = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.getUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'The route is not defined',
   });
 };
+
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'The route is not defined',
   });
 };
+
 exports.updateUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'The route is not defined',
   });
 };
+
 exports.deleteUser = (req, res) => {
   res.status(500).json({
     status: 'error',

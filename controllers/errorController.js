@@ -4,15 +4,18 @@ const handleCastErrorDB = (error) => {
   const message = `Invalid ${error._id}: ${error.value}`;
   return new AppError(message, 400);
 };
+
 const handleDuplicateErrorDB = (error) => {
   const value = error.keyValue;
   const message = `Duplicate field value: ${value} . Please use another value`;
   return new AppError(message, 400);
 };
+
 const handleValidatorErrorDB = (error) => {
   const message = Object.values(error).map((el) => el.message);
   return new AppError(message.join(', '), 400);
 };
+
 const sendErrorDev = (res, err) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -21,9 +24,8 @@ const sendErrorDev = (res, err) => {
     stack: err.stack,
   });
 };
-const sendErrorProd = (res, err) => {
-  //Operational, trusted error: send message to client
 
+const sendErrorProd = (res, err) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
@@ -40,10 +42,13 @@ const sendErrorProd = (res, err) => {
     });
   }
 };
+
 const handleJWTError = () =>
   new AppError('Invalid token, Please login again', 401);
+
 const handleJWTExpriedError = () =>
   new AppError('Expired Token, Please Login again');
+
 module.exports = (err, req, res, next) => {
   // console.log(err.stack);
   err.statusCode = err.statusCode || 500;

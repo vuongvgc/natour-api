@@ -2,57 +2,6 @@ const Tour = require('../models/toursModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-// class APIFeatures {
-//   constructor(query, queryString) {
-//     this.query = query;
-//     this.queryString = queryString;
-//   }
-
-//   filter() {
-//     // eslint-disable-next-line node/no-unsupported-features/es-syntax
-//     const queryObj = { ...this.queryString };
-//     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-//     excludedFields.forEach((el) => delete queryObj[el]);
-//     let queryString = JSON.stringify(queryObj);
-//     queryString = queryString.replace(
-//       /\b(gte|gt|lte|lt)\b/g,
-//       (match) => `$${match}`
-//     );
-//     this.query = Tour.find(JSON.parse(queryString));
-//     return this;
-//   }
-
-//   sort() {
-//     if (this.queryString.sort) {
-//       const sortBy = this.queryString.sort.split(',').join(' ');
-//       this.query = this.query.sort(sortBy);
-//     } else {
-//       this.query = this.query.sort('createAt');
-//     }
-//     return this;
-//   }
-
-//   limit() {
-//     if (this.queryString.fields) {
-//       const fields = this.queryString.fields.split(',').join(' ');
-//       this.query = this.query.select(fields);
-//     } else {
-//       // query = query.select('-__v -createAt');
-//       this.query = this.query.select('-__v');
-//     }
-//     return this;
-//   }
-
-//   pagination() {
-//     const page = this.queryString.page * 1 || 1;
-//     const limit = this.queryString.limit * 1 || 100;
-//     // page=2 ; limit=10 -> rs =11-20, -> skip = 10;
-//     // page=3 ; limit=10 -> rs =21-30, -> skip = 20;
-//     const skip = (page - 1) * limit;
-//     this.query = this.query.skip(skip).limit(limit);
-//     return this;
-//   }
-// }
 
 exports.aliasTopTour = async (req, res, next) => {
   req.query.limit = '5';
@@ -60,7 +9,6 @@ exports.aliasTopTour = async (req, res, next) => {
   req.query.fields = 'name,price, duration, ratingsAverage, difficulty';
   next();
 };
-// console.log(x);
 
 exports.getAllTours = async (req, res, next) => {
   try {
@@ -158,6 +106,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.createTour = catchAsync(async (req, res, next) => {
   const newTour = await Tour.create(req.body);
   res.status(200).json({
@@ -167,6 +116,7 @@ exports.createTour = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.updateTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -188,6 +138,7 @@ exports.deleteTour = catchAsync(async (req, res) => {
     data: null,
   });
 });
+
 exports.getToursStats = async (req, res) => {
   try {
     const stats = await Tour.aggregate([
@@ -229,6 +180,7 @@ exports.getToursStats = async (req, res) => {
     });
   }
 };
+
 exports.getMonthlyPlan = async (req, res) => {
   try {
     const { year } = req.params;
