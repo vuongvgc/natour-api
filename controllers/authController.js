@@ -21,6 +21,14 @@ const signToken = (id) =>
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  const cookieOption = {
+    expired: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOption.secure = true;
+  res.cookie('jwt', token, cookieOption);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -33,14 +41,7 @@ const createSendToken = (user, statusCode, res) => {
 exports.signup = catchAsync(async (req, res, next) => {
   try {
     const newUser = await User.create(req.body);
-    const token = signToken(newUser._id);
-    res.status(200).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser,
-      },
-    });
+    createSendToken(newUser, 200, res);
   } catch (err) {
     res.status(404).json({
       message: 'fail',
