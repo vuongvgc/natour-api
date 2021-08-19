@@ -43,5 +43,12 @@ reviewSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+reviewSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tours',
+  localField: '_id',
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
