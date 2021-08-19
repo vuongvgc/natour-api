@@ -9,6 +9,7 @@ const AppError = require('./utils/appError');
 const globalControlHandler = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 // set Security http Header
@@ -46,6 +47,7 @@ app.use(
 app.use(express.static('public'));
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl} on this server`, 404));
 });
