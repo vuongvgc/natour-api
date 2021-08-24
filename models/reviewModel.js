@@ -35,19 +35,14 @@ const reviewSchema = new mongoose.Schema(
 );
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'user',
-    select: 'name',
+    path: 'tour',
+    options: { select: 'name' }, // <-- wrap `select` in `options` here...
   }).populate({
-    path: 'tours',
-    select: 'name',
+    path: 'user',
+    options: { select: 'name photo' }, // <-- and here
   });
-  next();
-});
 
-reviewSchema.virtual('reviews', {
-  ref: 'Review',
-  foreignField: 'tours',
-  localField: '_id',
+  next();
 });
 
 const Review = mongoose.model('Review', reviewSchema);

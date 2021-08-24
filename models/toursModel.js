@@ -102,15 +102,30 @@ const tourSchema = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    // reviews: [
+    //   {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'Review',
+    //   },
+    // ],
   },
   {
     toJSON: { virtual: true },
     toObject: { virtual: true },
+  },
+  {
+    virtual: true,
   }
 );
 
 tourSchema.virtual('durationWeek').get(function () {
   return this.duration / 7;
+});
+
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tours',
+  localField: '_id',
 });
 
 tourSchema.pre('save', function (next) {
