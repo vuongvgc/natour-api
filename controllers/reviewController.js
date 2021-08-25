@@ -1,10 +1,13 @@
 const Review = require('../models/reviewModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 exports.getAllReviews = async (req, res, next) => {
   try {
-    const reviews = await Review.find();
+    let filter = {};
+    if (req.params.tourId) filter = { tour: req.params.tourId };
+    const reviews = await Review.find(filter);
     res.status(200).json({
       status: 'success',
       result: reviews.length,
@@ -15,7 +18,7 @@ exports.getAllReviews = async (req, res, next) => {
   } catch (error) {
     res.status(401).json({
       status: 'fail',
-      message: 'You not have permision',
+      message: 'You not have permission',
     });
   }
 };
@@ -43,3 +46,5 @@ exports.createReview = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.deleteReview = factory.deleteOne(Review);
