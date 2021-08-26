@@ -26,12 +26,14 @@ exports.getUser = (req, res) => {
   });
 };
 
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'The route is not defined',
-  });
-};
+// exports.createUser = (req, res) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'The route is not defined',
+//   });
+// };
+
+exports.createUser = factory.createOne(Users);
 
 // exports.updateUser = (req, res) => {
 //   res.status(500).json({
