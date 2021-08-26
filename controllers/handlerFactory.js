@@ -10,3 +10,15 @@ exports.deleteOne = (Model) =>
       data: null,
     });
   });
+
+exports.updateOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body);
+    if (!doc) return next(new AppError('Not Document with this ID', 404));
+    res.status(200).json({
+      status: 'Success',
+      data: {
+        data: doc,
+      },
+    });
+  });
