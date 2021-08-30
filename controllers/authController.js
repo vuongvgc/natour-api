@@ -104,6 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('User recently change password please login again', 401)
     );
   }
+  console.log(currentUser);
   req.user = currentUser;
   next();
 });
