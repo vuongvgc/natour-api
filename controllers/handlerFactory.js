@@ -61,6 +61,7 @@ exports.getAll = (Model) =>
       .sort()
       .limit()
       .pagination();
+    // const doc = await featuresTour.query.explain();
     const doc = await featuresTour.query;
     res.status(200).json({
       status: 'success',
