@@ -47,20 +47,20 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre('save', async function (next) {
-  // Only run function when password actual modify
-  if (!this.isModified('password')) return next();
-  // Hash the password with cost of 12
-  this.password = await bcrypt.hash(this.password, 12);
-  // Delete passwordConfirm Fields
-  this.passwordConfirm = undefined;
-});
+// userSchema.pre('save', async function (next) {
+//   // Only run function when password actual modify
+//   if (!this.isModified('password')) return next();
+//   // Hash the password with cost of 12
+//   this.password = await bcrypt.hash(this.password, 12);
+//   // Delete passwordConfirm Fields
+//   this.passwordConfirm = undefined;
+// });
 
-userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew) return next();
-  this.passwordChangedAt = Date.now() - 1000;
-  next();
-});
+// userSchema.pre('save', function (next) {
+//   if (!this.isModified('password') || this.isNew) return next();
+//   this.passwordChangedAt = Date.now() - 1000;
+//   next();
+// });
 
 userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
